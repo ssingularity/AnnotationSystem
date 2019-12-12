@@ -24,12 +24,12 @@
                 android:layout_height="wrap_content"/>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_test_text"
+                android:id="@+id/save"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="测试" />
+                android:text="暂存" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

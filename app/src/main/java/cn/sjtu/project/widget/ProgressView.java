@@ -166,7 +166,7 @@ public final class ProgressView extends View {
 
     /**
      * Set the properties of the paints we're using to
-     * draw the progress wheel
+     * drawOn the progress wheel
      */
     private void setupPaints() {
         mBarPaint.setColor(mBarColor);

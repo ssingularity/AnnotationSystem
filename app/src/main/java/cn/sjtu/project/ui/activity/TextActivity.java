@@ -1,6 +1,5 @@
 package cn.sjtu.project.ui.activity;
 
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.text.method.LinkMovementMethod;
 import android.view.ActionMode;
@@ -10,23 +9,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
+import com.orhanobut.logger.Logger;
+
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import cn.sjtu.project.R;
 import cn.sjtu.project.common.MyActivity;
+import cn.sjtu.project.common.utils.JsonUtil;
+import cn.sjtu.project.common.utils.SharedPreferenceUtil;
+import cn.sjtu.project.common.utils.StringUtil;
+import cn.sjtu.project.domain.Annotation;
+import cn.sjtu.project.domain.HomeWorkResult;
 import cn.sjtu.project.domain.SelectedText;
 import io.noties.markwon.Markwon;
+
+import static cn.sjtu.project.common.utils.FileUtil.readFromInputStream;
 
 public class TextActivity extends MyActivity {
     @BindView(R.id.text)
     TextView textView;
 
-    Map<String, String> store;
+    String homeWorkId = "1";
+
+    HomeWorkResult homeWorkResult;
 
     @Override
     protected int getLayoutId() {
@@ -41,13 +49,13 @@ public class TextActivity extends MyActivity {
 
     @Override
     protected void initData() {
-        store = new HashMap<>();
         initTextView();
-
+        initHomeWorkResult(homeWorkId);
+        mergeAnnotationList();
         ActionMode.Callback2 textSelectionActionModeCallback = new ActionMode.Callback2() {
             @Override
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
-                return true;//返回false则不会显示弹窗
+                return true;
             }
 
             @Override
@@ -60,15 +68,20 @@ public class TextActivity extends MyActivity {
 
             @Override
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                SelectedText selectedText = new SelectedText(textView);
                 switch (menuItem.getItemId()) {
+                    case R.id.justify:
+                        selectedText.intelligentlyAdjust();
                     case R.id.annotation:
-                        SelectedText selectedText = new SelectedText(textView);
-                        //TODO 开始写批注
-                        selectedText.paint(Color.YELLOW);
-                        selectedText.addClickedEvent(v -> {
-                            toast(selectedText.getContent());
+                        Annotation annotation = selectedText.convert2Annotation();
+                        //TODO 写批注
+                        annotation.drawOn(textView);
+                        annotation.addClickedEventOn(textView, v -> {
+                            //TODO 修改批注
+                            toast(annotation.getAnnotatedContent());
                         });
                         //TODO 存储元数据
+                        homeWorkResult.addAnnotation(annotation);
                         actionMode.finish();
                         break;
                 }
@@ -89,6 +102,28 @@ public class TextActivity extends MyActivity {
         textView.setCustomSelectionActionModeCallback(textSelectionActionModeCallback);
     }
 
+    private void mergeAnnotationList() {
+        for (Annotation annotation : homeWorkResult.getAnnotationList()) {
+            annotation.drawOn(textView);
+            annotation.addClickedEventOn(textView, v -> {
+                toast(annotation.getAnnotatedContent());
+            });
+        }
+    }
+
+    private void initHomeWorkResult(String homeWorkId) {
+        String json = SharedPreferenceUtil.getStringFromSharedPreference(getApplicationContext(), homeWorkId);
+        if (StringUtil.isEmpty(json)) {
+            homeWorkResult = HomeWorkResult.builder()
+                    .homeWorkId(homeWorkId)
+                    .annotationList(new ArrayList<>())
+                    .build();
+        }
+        else {
+            homeWorkResult = JsonUtil.covert2Object(json, HomeWorkResult.class);
+        }
+    }
+
     private void initTextView() {
         InputStream is = getResources().openRawResource(R.raw.sample);
         String content = readFromInputStream(is);
@@ -96,19 +131,13 @@ public class TextActivity extends MyActivity {
         markwon.setMarkdown(textView, content);
     }
 
-    private String readFromInputStream(InputStream is) {
-        BufferedReader bf = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        try {
-            while (null != (line = bf.readLine())) {
-                sb.append(line);
-                sb.append("\n");
-            }
+    @OnClick({R.id.save})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.save:
+                String json = JsonUtil.convert2String(homeWorkResult);
+                Logger.i(json);
+                SharedPreferenceUtil.saveSharedPreference(getApplicationContext(), homeWorkId, json);
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return sb.toString();
     }
 }

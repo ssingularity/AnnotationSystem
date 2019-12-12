@@ -140,7 +140,7 @@ public final class LoopView extends View {
         int height = MeasureSpec.getSize(heightMeasureSpec);
 
         mItemHeight = mLineSpacingMultiplier * mMaxTextHeight;
-        // auto calculate the text's left/right value when draw
+        // auto calculate the text's left/right value when drawOn
         mHorizontalPadding = (width - (float) mMaxTextWidth) / 2;
         mVerticalPadding = (height - mCircularDiameter) / 2;
 
@@ -198,7 +198,7 @@ public final class LoopView extends View {
             count++;
         }
 
-        // draw top and bottom line
+        // drawOn top and bottom line
         canvas.drawLine(0, mTopLineY, getMeasuredWidth(), mTopLineY, mCenterLinePaint);
         canvas.drawLine(0, mBottomLineY, getMeasuredWidth(), mBottomLineY, mCenterLinePaint);
 
@@ -214,7 +214,7 @@ public final class LoopView extends View {
             // get angle
             float angle = (float) (radian * 180 / Math.PI);
 
-            // when angle >= 180 || angle <= 0 don't draw
+            // when angle >= 180 || angle <= 0 don't drawOn
             if (angle >= 180F || angle <= 0F) {
                 canvas.restore();
             } else {
@@ -225,7 +225,7 @@ public final class LoopView extends View {
                 // scale offset = Math.sin(radian) -> 0 - 1
                 canvas.scale(1.0F, (float) Math.sin(radian));
                 if (translateY <= mTopLineY) {
-                    // draw text y between 0 -> mTopLineY,include incomplete text
+                    // drawOn text y between 0 -> mTopLineY,include incomplete text
                     canvas.save();
                     canvas.clipRect(0, 0, getMeasuredWidth(), mTopLineY - translateY);
                     canvas.drawText(mItemTempArray[count], mHorizontalPadding, mMaxTextHeight, mTopBottomTextPaint);
@@ -235,7 +235,7 @@ public final class LoopView extends View {
                     canvas.drawText(mItemTempArray[count], mHorizontalPadding, mMaxTextHeight, mCenterTextPaint);
                     canvas.restore();
                 } else if (mMaxTextHeight + translateY >= mBottomLineY) {
-                    // draw text y between  mTopLineY -> mBottomLineY ,include incomplete text
+                    // drawOn text y between  mTopLineY -> mBottomLineY ,include incomplete text
                     canvas.save();
                     canvas.clipRect(0, 0, getMeasuredWidth(), mBottomLineY - translateY);
                     canvas.drawText(mItemTempArray[count], mHorizontalPadding, mMaxTextHeight, mCenterTextPaint);
@@ -245,7 +245,7 @@ public final class LoopView extends View {
                     canvas.drawText(mItemTempArray[count], mHorizontalPadding, mMaxTextHeight, mTopBottomTextPaint);
                     canvas.restore();
                 } else if (translateY >= mTopLineY && mMaxTextHeight + translateY <= mBottomLineY) {
-                    // draw center complete text
+                    // drawOn center complete text
                     canvas.clipRect(0, 0, getMeasuredWidth(), (int) (itemHeight));
                     canvas.drawText(mItemTempArray[count], mHorizontalPadding, mMaxTextHeight, mCenterTextPaint);
                     // center one indicate selected item
