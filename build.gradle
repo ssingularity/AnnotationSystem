@@ -16,9 +16,7 @@ allprojects {
         google()
         maven {url "https://jitpack.io"}
         maven {url 'https://maven.google.com'}
-        maven {
-            url "https://pdftron-maven.s3.amazonaws.com/release"
-        }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     }
 }
 

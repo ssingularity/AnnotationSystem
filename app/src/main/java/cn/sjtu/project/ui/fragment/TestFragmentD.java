@@ -5,9 +5,10 @@ import android.net.Uri;
 import android.view.View;
 
 import com.hjq.base.BaseDialog;
-import com.pdftron.pdf.config.ViewerConfig;
-import com.pdftron.pdf.controls.DocumentActivity;
 
+import java.util.ArrayList;
+
+import butterknife.OnClick;
 import cn.sjtu.project.R;
 import cn.sjtu.project.common.MyLazyFragment;
 import cn.sjtu.project.ui.activity.AboutActivity;
@@ -15,7 +16,6 @@ import cn.sjtu.project.ui.activity.DialogActivity;
 import cn.sjtu.project.ui.activity.HomeActivity;
 import cn.sjtu.project.ui.activity.ImageActivity;
 import cn.sjtu.project.ui.activity.LoginActivity;
-import cn.sjtu.project.ui.activity.PDFActivity;
 import cn.sjtu.project.ui.activity.PasswordForgetActivity;
 import cn.sjtu.project.ui.activity.PasswordResetActivity;
 import cn.sjtu.project.ui.activity.PersonalDataActivity;
@@ -24,12 +24,9 @@ import cn.sjtu.project.ui.activity.PhoneVerifyActivity;
 import cn.sjtu.project.ui.activity.RegisterActivity;
 import cn.sjtu.project.ui.activity.SettingActivity;
 import cn.sjtu.project.ui.activity.StatusActivity;
+import cn.sjtu.project.ui.activity.TextActivity;
 import cn.sjtu.project.ui.activity.WebActivity;
 import cn.sjtu.project.ui.dialog.MessageDialog;
-
-import java.util.ArrayList;
-
-import butterknife.OnClick;
 
 /**
  *    author : Android 轮子哥
@@ -60,7 +57,8 @@ public final class TestFragmentD extends MyLazyFragment<HomeActivity> {
 
     @OnClick({R.id.btn_test_dialog, R.id.btn_test_hint, R.id.btn_test_login, R.id.btn_test_register, R.id.btn_test_forget,
             R.id.btn_test_reset,R.id.btn_test_verify, R.id.btn_test_change, R.id.btn_test_personal, R.id.btn_test_setting,
-            R.id.btn_test_about, R.id.btn_test_browser, R.id.btn_test_image, R.id.btn_test_crash, R.id.btn_test_pay, R.id.btn_test_document})
+            R.id.btn_test_about, R.id.btn_test_browser, R.id.btn_test_image, R.id.btn_test_crash, R.id.btn_test_pay,
+            R.id.btn_test_text})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_test_dialog:
@@ -133,8 +131,8 @@ public final class TestFragmentD extends MyLazyFragment<HomeActivity> {
                         })
                         .show();
                 break;
-            case R.id.btn_test_document:
-                startActivity(PDFActivity.class);
+            case R.id.btn_test_text:
+                startActivity(TextActivity.class);
             default:
                 break;
         }

@@ -173,10 +173,8 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="portrait" />
 
-        <!-- 状态案例 -->
-        <activity
-            android:name="cn.sjtu.project.ui.activity.PDFActivity"
-            android:windowSoftInputMode="adjustPan"/>
+        <!-- Text -->
+        <activity android:name=".ui.activity.TextActivity" />
 
     </application>
 

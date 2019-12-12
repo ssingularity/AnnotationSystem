@@ -13,6 +13,7 @@ import com.hjq.image.ImageLoader;
 import com.hjq.toast.ToastInterceptor;
 import com.hjq.toast.ToastUtils;
 import com.hjq.umeng.UmengClient;
+import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -86,6 +87,12 @@ public final class MyApplication extends Application {
                 // 设置监听器
                 //.eventListener(new YourCustomEventListener())
                 .apply();
+
+        // Logger 初始化
+        Logger
+                .init("AnnotationSystem")    //LOG TAG默认是PRETTYLOGGER
+                .methodCount(3)                 // 决定打印多少行（每一行代表一个方法）默认：2
+                .methodOffset(2);                // 默认：0
     }
 
     @Override
